@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjetoAustralia.Domain;
+using OrdemServico.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoAustralia.Data
+namespace OrdemServico.Data
 {
     public class ClienteMap : IEntityMap
     {

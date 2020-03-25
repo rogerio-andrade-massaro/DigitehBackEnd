@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using ProjetoAustralia.Application;
-using ProjetoAustralia.Domain;
-using ProjetoAustralia.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
-namespace ProjetoAustralia.API
+namespace OrdemServico.API
 {
     public class Startup
     {
@@ -27,61 +28,61 @@ namespace ProjetoAustralia.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(typeof(IAppServiceBase<>), typeof(AppServiceBase<>));
-            services.AddScoped<IClienteAppService, ClienteAppService>();
+            services.AddControllers();
 
-            services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
-            services.AddScoped<IServiceCliente, ServiceCliente>();
+            // Add the Swagger pipeline
+            services.AddSwaggerGen(a =>
+            {
+                a.SwaggerDoc("OrdemServico", new OpenApiInfo { Version = "1.0", Description = "OrdemServico", Title = "OrdemServico" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                //a.IncludeXmlComments(xmlPath);
 
-            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddScoped<IRepositoryCliente, RepositoryCliente>();
+                var file = @"C:\OrdemServico.API.xml";
+                a.IncludeXmlComments(file);
+            
+                //a.OperationFilter<HeaderOperationFilter>();
+            });
 
-            var sqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
-
-            services.AddDbContext<Context>(options =>
-                options.UseMySql(
-                    sqlConnectionString
-                //,b => b.MigrationsAssembly("ProjetoAustralia")
-                )
-            );
-
-
-            services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseCors(builder =>
-            builder.WithOrigins("http://localhost:4200")
-           .AllowAnyOrigin()
-           .AllowAnyHeader()
-           .AllowAnyMethod());
+        
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseMvc();
+            app.UseHttpsRedirection();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            // Configure Swagger
+            app.UseSwagger(c =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                c.RouteTemplate = "OrdemServico/swagger/OrdemServico.API.xml/swagger.json";
             });
 
-            //app.UseMvc(routes =>
-            //{
-            //    // Configurando o uso de Areas
-            //    routes.MapRoute("areaRoute",
-            //        "{area:exists}/{controller=Home}/{action=Default}/{id?}");
+            //https://thecodebuzz.com/swagger-api-documentation-in-net-core-2-2/
+            //https://thecodebuzz.com/resolved-failed-to-load-api-definition-undefined-swagger-v1-swagger-json/
 
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
+            // Configure Swagger UI
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/OrdemServico/swagger/v1/swagger.json", "OrdemServico");
+                //c.RoutePrefix = "OrdemServico/swagger";
+            });
+
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

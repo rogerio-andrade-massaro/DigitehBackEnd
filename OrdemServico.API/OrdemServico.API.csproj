@@ -4,28 +4,24 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netcoreapp3.1\OrdemServico.API.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Compile Remove="Controllers\TestController.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+    <ProjectReference Include="..\OrdemServico.Application\OrdemServico.Application.csproj" />
+    <ProjectReference Include="..\OrdemServico.Data\OrdemServico.Data.csproj" />
+    <ProjectReference Include="..\OrdemServico.Domain\OrdemServico.Domain.csproj" />
   </ItemGroup>
 
- <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.0-rtm-10059" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ProjetoAustralia.Application\OrdemServico.Application.csproj" />
-    <ProjectReference Include="..\ProjetoAustralia.Data\OrdemServico.Data.csproj" />
-    <ProjectReference Include="..\ProjetoAustralia.Domain\OrdemServico.Domain.csproj" />
-  </ItemGroup>
 
 </Project>

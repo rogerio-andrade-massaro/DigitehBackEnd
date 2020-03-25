@@ -1,9 +1,9 @@
-﻿using ProjetoAustralia.Domain;
+﻿using OrdemServico.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoAustralia.Application
+namespace OrdemServico.Application
 {
     public class ClienteAppService : AppServiceBase<Cliente>, IClienteAppService
     {

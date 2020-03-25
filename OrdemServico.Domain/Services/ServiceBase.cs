@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoAustralia.Domain
+namespace OrdemServico.Domain
 {
     public class ServiceBase<TEntity> : IServiceBase<TEntity> where TEntity : class
     {

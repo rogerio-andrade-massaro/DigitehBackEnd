@@ -1,4 +1,4 @@
-﻿using ProjetoAustralia.Domain;
+﻿using OrdemServico.Domain;
 using StaticDotNet.EntityFrameworkCore.ModelConfiguration;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjetoAustralia.Data
+namespace OrdemServico.Data
 {
     public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
     {

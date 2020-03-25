@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoAustralia.Data
+namespace OrdemServico.Data
 {
     public class IEntityMap
     {

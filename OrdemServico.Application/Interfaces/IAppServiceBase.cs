@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjetoAustralia.Application
+namespace OrdemServico.Application
 {
     public interface IAppServiceBase<TEntity> where TEntity : class
     {

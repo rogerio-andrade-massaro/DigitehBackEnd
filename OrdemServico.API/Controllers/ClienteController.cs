@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProjetoAustralia.Application;
-using ProjetoAustralia.Domain;
+using OrdemServico.Application;
+using OrdemServico.Domain;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ProjetoAustralia.API.Controllers
+namespace OrdemServico.API.Controllers
 {
-    public class ClienteController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class ClienteController : ControllerBase
     {
         private IClienteAppService _clienteApp;
 
@@ -19,37 +21,40 @@ namespace ProjetoAustralia.API.Controllers
             _clienteApp = clienteApp;
         }
 
-        // GET api/<controller>
+        [HttpGet("getall")]
         public IEnumerable<Cliente> Get()
         {
             var clientes = _clienteApp.GetAll();
             return clientes;
         }
 
+        [HttpGet("getbyid/{id}")]
         public Cliente GetById(int id)
         {
             //var cliente = _clienteApp.GetById(id);
             var cliente = _clienteApp.GetById(id);
             return cliente;
         }
+
+        [HttpGet("getidwithorders/{id}")]
         public Cliente GetByIdWithOrders(int id)
         {
             //var cliente = _clienteApp.GetById(id);
             var cliente = _clienteApp.ClienteComPedido(id);
             return cliente;
         }
-        [HttpPost]
+        [HttpPost("add")]
         public void Add([FromBody]Cliente cliente)
         {
             _clienteApp.Add(cliente);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public void Update([FromBody]Cliente cliente)
         {
             _clienteApp.Update(cliente);
         }
-        [HttpDelete]
+        [HttpDelete("delete")]
         public void Delete(int id)
         {
             _clienteApp.Remove(_clienteApp.GetById(id));

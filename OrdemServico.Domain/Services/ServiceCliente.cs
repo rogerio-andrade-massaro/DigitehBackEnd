@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ProjetoAustralia.Domain
+namespace OrdemServico.Domain
 {
     public class ServiceCliente : ServiceBase<Cliente>, IServiceCliente
     {

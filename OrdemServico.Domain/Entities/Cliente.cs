@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace ProjetoAustralia.Domain
+namespace OrdemServico.Domain
 {
     [Table("Clientes")]
     public class Cliente
