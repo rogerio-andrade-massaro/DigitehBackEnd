@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OrdemServico.Application;
+using OrdemServico.Data;
+using OrdemServico.Domain;
 
 namespace OrdemServico.API
 {
@@ -30,10 +34,22 @@ namespace OrdemServico.API
         {
             services.AddControllers();
 
+            // Enable CORS
+            services.AddCors(o => o.AddPolicy("EnableCORS", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:4200", "http://localhost:8045").Build();
+            }));
+
+
             // Add the Swagger pipeline
             services.AddSwaggerGen(a =>
             {
-                a.SwaggerDoc("OrdemServico", new OpenApiInfo { Version = "1.0", Description = "OrdemServico", Title = "OrdemServico" });
+                a.SwaggerDoc("v1", new OpenApiInfo { Version = "v1", Description = "Ordem Servico", Title = "Ordem Servico" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 //a.IncludeXmlComments(xmlPath);
@@ -41,12 +57,32 @@ namespace OrdemServico.API
                 var file = @"C:\OrdemServico.API.xml";
                 a.IncludeXmlComments(file);
             
-                //a.OperationFilter<HeaderOperationFilter>();
             });
+
+            services.AddScoped(typeof(IAppServiceBase<>), typeof(AppServiceBase<>));
+            services.AddScoped<IClienteAppService, ClienteAppService>();
+
+            services.AddScoped(typeof(IServiceBase<>), typeof(ServiceBase<>));
+            services.AddScoped<IServiceCliente, ServiceCliente>();
+
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+            services.AddScoped<IRepositoryCliente, RepositoryCliente>();
+
+            var sqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
+
+            services.AddDbContext<Context>(options =>
+                options.UseMySql(
+                    sqlConnectionString
+                //,b => b.MigrationsAssembly("ProjetoAustralia")
+                )
+            );
+
+            
+
 
         }
 
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,19 +99,12 @@ namespace OrdemServico.API
             app.UseAuthorization();
 
             // Configure Swagger
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "OrdemServico/swagger/OrdemServico.API.xml/swagger.json";
-            });
-
-            //https://thecodebuzz.com/swagger-api-documentation-in-net-core-2-2/
-            //https://thecodebuzz.com/resolved-failed-to-load-api-definition-undefined-swagger-v1-swagger-json/
+            app.UseSwagger();
 
             // Configure Swagger UI
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/OrdemServico/swagger/v1/swagger.json", "OrdemServico");
-                //c.RoutePrefix = "OrdemServico/swagger";
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordem Servico");
             });
 
 
@@ -83,6 +112,8 @@ namespace OrdemServico.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors("EnableCORS");
         }
     }
 }

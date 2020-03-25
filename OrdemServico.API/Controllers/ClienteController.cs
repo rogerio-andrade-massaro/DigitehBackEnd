@@ -10,24 +10,40 @@ using OrdemServico.Domain;
 
 namespace OrdemServico.API.Controllers
 {
+    /// <summary>
+    /// Retorna informações sobre Clientes
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
         private IClienteAppService _clienteApp;
 
+        /// <summary>
+        /// Construtor Default
+        /// </summary>
+        /// <param name="clienteApp"></param>
         public ClienteController(IClienteAppService clienteApp)
         {
             _clienteApp = clienteApp;
         }
 
+        /// <summary>
+        /// Retorna todos Clientes
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("getall")]
-        public IEnumerable<Cliente> Get()
+        public IEnumerable<Cliente> GetAll()
         {
             var clientes = _clienteApp.GetAll();
             return clientes;
         }
 
+        /// <summary>
+        /// Retorna clientes por ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("getbyid/{id}")]
         public Cliente GetById(int id)
         {
@@ -36,6 +52,11 @@ namespace OrdemServico.API.Controllers
             return cliente;
         }
 
+        /// <summary>
+        /// Retorna clientes que possuem Chamados
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("getidwithorders/{id}")]
         public Cliente GetByIdWithOrders(int id)
         {
@@ -43,17 +64,31 @@ namespace OrdemServico.API.Controllers
             var cliente = _clienteApp.ClienteComPedido(id);
             return cliente;
         }
+
+        /// <summary>
+        /// Adiciona um novo cliente
+        /// </summary>
+        /// <param name="cliente"></param>
         [HttpPost("add")]
         public void Add([FromBody]Cliente cliente)
         {
             _clienteApp.Add(cliente);
         }
 
+        /// <summary>
+        /// Atualiza um cliente
+        /// </summary>
+        /// <param name="cliente"></param>
         [HttpPut("update")]
         public void Update([FromBody]Cliente cliente)
         {
             _clienteApp.Update(cliente);
         }
+
+        /// <summary>
+        /// Apaga um cliente
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("delete")]
         public void Delete(int id)
         {
