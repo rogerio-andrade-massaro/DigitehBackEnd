@@ -71,7 +71,7 @@ namespace OrdemServico.API
             var sqlConnectionString = Configuration.GetConnectionString("DataAccessMySqlProvider");
 
             services.AddDbContext<Context>(options =>
-                options.UseMySql(
+                options.UseSqlServer(
                     sqlConnectionString
                 //,b => b.MigrationsAssembly("ProjetoAustralia")
                 )
