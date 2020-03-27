@@ -34,17 +34,15 @@ namespace OrdemServico.API
         {
             services.AddControllers();
 
-            // Enable CORS
-            services.AddCors(o => o.AddPolicy("EnableCORS", builder =>
+            services.AddCors(options =>
             {
-                builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                    .WithOrigins("http://localhost:4200", "http://localhost:8045").Build();
-            }));
-
+                options.AddPolicy("AllowAll",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200",
+                                        "http://www.contoso.com");
+                });
+            });
 
             // Add the Swagger pipeline
             services.AddSwaggerGen(a =>
@@ -77,12 +75,7 @@ namespace OrdemServico.API
                 )
             );
 
-            
-
-
         }
-
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -96,6 +89,8 @@ namespace OrdemServico.API
 
             app.UseRouting();
 
+            app.UseCors("AllowAll");
+
             app.UseAuthorization();
 
             // Configure Swagger
@@ -107,13 +102,11 @@ namespace OrdemServico.API
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordem Servico");
             });
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            app.UseCors("EnableCORS");
         }
     }
 }

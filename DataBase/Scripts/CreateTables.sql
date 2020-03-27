@@ -1,5 +1,7 @@
+DROP TABLE Clientes
+go
 CREATE TABLE Clientes( 
-	ClienteId int,
+	ClienteId int identity (1,1),
 	Cpf varchar(14),
 	Nome varchar(50),
 	Endereco varchar(200),
