@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrdemServico.Application;
 using OrdemServico.Domain;
@@ -32,6 +33,7 @@ namespace OrdemServico.API.Controllers
         /// Retorna todos Clientes
         /// </summary>
         /// <returns></returns>
+        [Authorize("Bearer")]
         [HttpGet("getall")]
         public IEnumerable<Cliente> GetAll()
         {
