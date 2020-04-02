@@ -25,7 +25,7 @@ namespace OrdemServico.API.Controllers
                 [FromServices]TokenConfigurations tokenConfigurations)
         {
             bool credenciaisValidas = false;
-            if (usuario != null && !String.IsNullOrWhiteSpace(usuario.UserId))
+            if (usuario != null && !String.IsNullOrWhiteSpace(usuario.Email))
             {
                 //var usuarioBase = usersDAO.Find(usuario.UserID);
                 //credenciaisValidas = (usuarioBase != null &&
@@ -38,10 +38,10 @@ namespace OrdemServico.API.Controllers
             if (credenciaisValidas)
             {
                 ClaimsIdentity identity = new ClaimsIdentity(
-                    new GenericIdentity(usuario.UserId, "Login"),
+                    new GenericIdentity(usuario.Email, "Login"),
                     new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.UserId)
+                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Email)
                     }
                 );
 

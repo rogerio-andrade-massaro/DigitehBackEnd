@@ -37,6 +37,15 @@ namespace OrdemServico.API
         {
             services.AddControllers();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200");
+                });
+            });
+
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
 
@@ -77,16 +86,6 @@ namespace OrdemServico.API
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme‌​)
                     .RequireAuthenticatedUser().Build());
-            });
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                builder =>
-                {
-                    builder.WithOrigins("http://localhost:4200",
-                                        "http://www.contoso.com");
-                });
             });
 
             // Add the Swagger pipeline
