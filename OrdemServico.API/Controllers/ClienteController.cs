@@ -15,6 +15,7 @@ namespace OrdemServico.API.Controllers
     /// Retorna informações sobre Clientes
     /// </summary>
     [ApiController]
+    [Authorize("Bearer")]
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
@@ -33,7 +34,6 @@ namespace OrdemServico.API.Controllers
         /// Retorna todos Clientes
         /// </summary>
         /// <returns></returns>
-        [Authorize("Bearer")]
         [HttpGet("getall")]
         public IEnumerable<Cliente> GetAll()
         {
