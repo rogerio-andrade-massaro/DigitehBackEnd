@@ -25,6 +25,7 @@ namespace OrdemServico.API.Controllers
                 [FromServices]TokenConfigurations tokenConfigurations)
         {
             bool credenciaisValidas = false;
+            
             if (usuario != null && !String.IsNullOrWhiteSpace(usuario.Email))
             {
                 //var usuarioBase = usersDAO.Find(usuario.UserID);

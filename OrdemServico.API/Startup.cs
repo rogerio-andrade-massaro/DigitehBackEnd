@@ -59,6 +59,7 @@ namespace OrdemServico.API
                     .Configure(tokenConfigurations);
             services.AddSingleton(tokenConfigurations);
 
+            Logger.SetLog4NetConfiguration();
 
             services.AddAuthentication(authOptions =>
             {
@@ -126,7 +127,7 @@ namespace OrdemServico.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -143,6 +144,8 @@ namespace OrdemServico.API
 
             // Configure Swagger
             app.UseSwagger();
+
+            loggerFactory.AddLog4Net();
 
             // Configure Swagger UI
             app.UseSwaggerUI(c =>
