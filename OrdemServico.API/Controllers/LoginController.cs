@@ -32,7 +32,7 @@ namespace OrdemServico.API.Controllers
                 //    usuario.UserID == usuarioBase.UserID &&
                 //    usuario.AccessKey == usuarioBase.AccessKey);
 
-                if(usuario.Email == "rogerio")
+                if(usuario.Email == "rogerio@m.com")
                 {
                     credenciaisValidas = true;
                 }
